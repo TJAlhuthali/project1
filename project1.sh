@@ -13,6 +13,32 @@ add_student() {
 #----------------------------------------------------------- jouri 4450003702 Make bookings + check if room is already booked
 
 make_booking() {
+  get_valid_id
+
+  if ! grep -q "^$id," "$students_file"; then
+    echo "Student ID not found. Please register first."
+    return
+  fi
+
+  while true; do
+    read -p "Enter room number (1-10): " room
+    room="${room//[[:space:]]/}"
+    if [[ "$room" =~ ^([1-9]|10)$ ]]; then
+      break
+    else
+      echo "Invalid room number. Must be between 1 and 10."
+    fi
+  done
+
+  read -p "Enter date (YYYY-MM-DD): " date
+  read -p "Enter time (e.g. 14:00): " time
+
+  if awk -F',' -v r="$room" -v d="$date" -v t="$time" '$2 == r && $3 == d && $4 == t' "$bookings_file" | grep -q .; then
+    echo "Sorry, this room is already booked at that time."
+  else
+    echo "$id,$room,$date,$time" >> "$bookings_file"
+    echo "Room booked successfully."
+  fi
 }
 
 #--------------------------------------------------------------- toleen 445000362 Search by student/room + room availability check
