@@ -5,9 +5,23 @@ students_file="students.txt"
 bookings_file="bookings.txt"
 
 get_valid_id() { 
+while true; do
+    read -p "Enter student ID (9 digits): " id
+    id="${id//[[:space:]]/}"
+    if [[ "$id" =~ ^[0-9]{9}$ ]]; then
+      break
+    else
+      echo "Invalid ID. It must be exactly 9 digits."
+    fi
+  done
 }
 
+
 add_student() {
+read -p "Enter student name: " name
+  get_valid_id
+  echo "$id,$name" >> "$students_file"
+  echo "Student registered successfully."
 }
 
 #----------------------------------------------------------- jouri 4450003702 Make bookings + check if room is already booked
