@@ -109,22 +109,24 @@ check_room_availability() {
 
 #----------------------------- Main Menu
 
-# Repeats until user chooses to exit
+# This menu repeats until the user chooses to exit
 while true; do
   echo ""
   echo "----- Welcome to our Study Room Booking System -----"
-  echo "1) Register new student"
-  echo "2) Make a booking"
-  echo "3) Search booking"
-  echo "4) Exit"
+  echo "1) Register new student"        # Option to add a new student with ID validation
+  echo "2) Make a booking"             # Option to book a room for a registered student
+  echo "3) Search booking"             # Option to search bookings by student ID or room number
+  echo "4) Check room availability"   # New option to check if a room is free at a specific date and time
+  echo "5) Exit"                     # Option to exit the program
   read -p "Choose an option: " choice
 
   case $choice in
-    1) add_student ;;         # Option 1: Register student
-    2) make_booking ;;        # Option 2: Book room
-    3) search_booking ;;      # Option 3: Search
-    4) echo "Goodbye!"; break ;;  # Option 4: Exit
-    *) echo "Invalid option, please try again." ;;
+    1) add_student ;;                # Call the function to register a new student
+    2) make_booking ;;               # Call the function to make a booking
+    3) search_booking ;;             # Call the function to search bookings
+    4) check_room_availability ;;   # Call the function to check if a room is available
+    5) echo "Goodbye!"; break ;;    # Exit the loop and end the program
+    *) echo "Invalid option, please try again." ;;  # Handle invalid input
   esac
 done
 
