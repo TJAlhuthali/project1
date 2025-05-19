@@ -10,7 +10,7 @@ get_valid_id() {
     read -p "Enter student ID (9 digits): " id
     id="${id//[[:space:]]/}"  # remove spaces
     if [[ "$id" =~ ^[0-9]{9}$ ]]; then
-      break
+      break 
     else
       echo "Invalid ID. It must be exactly 9 digits."
     fi
