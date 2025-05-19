@@ -1,13 +1,14 @@
 #!/bin/bash
-#---------------------------------------------------------- reham 445003512 Register students + validate student ID
+#----------------------------- Reham 445003512 - Register students + validate student ID
 
 students_file="students.txt"
 bookings_file="bookings.txt"
 
+# Ask user for a valid 9-digit student ID
 get_valid_id() { 
-while true; do
+  while true; do
     read -p "Enter student ID (9 digits): " id
-    id="${id//[[:space:]]/}"
+    id="${id//[[:space:]]/}"  # remove spaces
     if [[ "$id" =~ ^[0-9]{9}$ ]]; then
       break
     else
@@ -16,24 +17,27 @@ while true; do
   done
 }
 
-
+# Add new student name and ID to the file
 add_student() {
-read -p "Enter student name: " name
+  read -p "Enter student name: " name
   get_valid_id
   echo "$id,$name" >> "$students_file"
   echo "Student registered successfully."
 }
 
-#----------------------------------------------------------- jouri 4450003702 Make bookings + check if room is already booked
+#----------------------------- Jouri 4450003702 - Make bookings + check room availability
 
+# Book a room for a registered student
 make_booking() {
   get_valid_id
 
+  # Make sure student exists
   if ! grep -q "^$id," "$students_file"; then
     echo "Student ID not found. Please register first."
     return
   fi
 
+  # Get room number between 1–10
   while true; do
     read -p "Enter room number (1-10): " room
     room="${room//[[:space:]]/}"
@@ -44,9 +48,11 @@ make_booking() {
     fi
   done
 
+  # Get booking date and time
   read -p "Enter date (YYYY-MM-DD): " date
   read -p "Enter time (e.g. 14:00): " time
 
+  # Check if room is already taken
   if awk -F',' -v r="$room" -v d="$date" -v t="$time" '$2 == r && $3 == d && $4 == t' "$bookings_file" | grep -q .; then
     echo "Sorry, this room is already booked at that time."
   else
@@ -55,8 +61,9 @@ make_booking() {
   fi
 }
 
-#--------------------------------------------------------------- toleen 445000362 Search by student/room + room availability check
+#----------------------------- Toleen 445000362 - Search bookings + check room availability
 
+# Let user search by ID or room
 search_booking() {
   echo "Search by:"
   echo "1) Student ID"
@@ -78,11 +85,11 @@ search_booking() {
       echo "Invalid option."
       ;;
   esac
-  
-  }
+}
 
+# Check if specific room is free at a certain time
 check_room_availability() {
- read -p "Enter room number (1-10): " room
+  read -p "Enter room number (1-10): " room
   room="${room//[[:space:]]/}"
   if ! [[ "$room" =~ ^([1-9]|10)$ ]]; then
     echo "Invalid room number. Must be between 1 and 10."
@@ -92,15 +99,17 @@ check_room_availability() {
   read -p "Enter date (YYYY-MM-DD): " date
   read -p "Enter time (e.g. 14:00): " time
 
+  # Search if the room is booked
   if awk -F',' -v r="$room" -v d="$date" -v t="$time" '$2 == r && $3 == d && $4 == t' "$bookings_file" | grep -q .; then
     echo "Room $room is already booked on $date at $time."
   else
     echo "Room $room is available on $date at $time."
   fi
-  }
+}
 
-#------------------------------------------------------------------------ Main Program
+#----------------------------- Main Menu
 
+# Repeats until user chooses to exit
 while true; do
   echo ""
   echo "----- Welcome to our Study Room Booking System -----"
@@ -111,12 +120,11 @@ while true; do
   read -p "Choose an option: " choice
 
   case $choice in
-    1) add_student ;;
-    2) make_booking ;;
-    3) search_booking ;;
-    4) echo "Goodbye!"; break ;;
+    1) add_student ;;         # Option 1: Register student
+    2) make_booking ;;        # Option 2: Book room
+    3) search_booking ;;      # Option 3: Search
+    4) echo "Goodbye!"; break ;;  # Option 4: Exit
     *) echo "Invalid option, please try again." ;;
   esac
 done
-
 
