@@ -116,7 +116,7 @@ while true; do
   echo "1) Register new student"        # Option to add a new student with ID validation
   echo "2) Make a booking"             # Option to book a room for a registered student
   echo "3) Search booking"             # Option to search bookings by student ID or room number
-  echo "4) Check room availability"   # New option to check if a room is free at a specific date and time
+  echo "4) Check room availability"   # option to check if a room is free at a specific date and time
   echo "5) Exit"                     # Option to exit the program
   read -p "Choose an option: " choice
 
